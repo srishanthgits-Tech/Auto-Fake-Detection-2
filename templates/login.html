@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>TruthAI | Secure Login</title>
+
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        /* =====================================================
+           BODY
+        ===================================================== */
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                Inter,
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+
+                radial-gradient(
+                    circle at 15% 20%,
+                    rgba(75, 113, 255, 0.18),
+                    transparent 32%
+                ),
+
+                radial-gradient(
+                    circle at 85% 75%,
+                    rgba(132, 77, 255, 0.16),
+                    transparent 30%
+                ),
+
+                linear-gradient(
+                    135deg,
+                    #070c1a 0%,
+                    #0c1427 50%,
+                    #080e1c 100%
+                );
+
+            color: white;
+
+            overflow: hidden;
+        }
+
+
+        /* =====================================================
+           BACKGROUND GRID
+        ===================================================== */
+
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            opacity: 0.12;
+
+            background-image:
+
+                linear-gradient(
+                    rgba(255,255,255,0.04) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.04) 1px,
+                    transparent 1px
+                );
+
+            background-size: 50px 50px;
+        }
+
+
+        /* =====================================================
+           GLOW ORBS
+        ===================================================== */
+
+        .orb {
+
+            position: fixed;
+
+            border-radius: 50%;
+
+            filter: blur(80px);
+
+            pointer-events: none;
+        }
+
+
+        .orb-one {
+
+            width: 300px;
+
+            height: 300px;
+
+            background: rgba(69, 104, 255, 0.14);
+
+            top: -120px;
+
+            left: -100px;
+        }
+
+
+        .orb-two {
+
+            width: 280px;
+
+            height: 280px;
+
+            background: rgba(128, 74, 255, 0.12);
+
+            bottom: -100px;
+
+            right: -80px;
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .navbar {
+
+            position: absolute;
+
+            top: 25px;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            width: calc(100% - 70px);
+
+            max-width: 1250px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 14px 20px;
+
+            border-radius: 16px;
+
+            background:
+                rgba(18, 28, 48, 0.68);
+
+            border:
+                1px solid rgba(255,255,255,0.10);
+
+            backdrop-filter: blur(18px);
+
+            z-index: 10;
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            font-size: 20px;
+
+            font-weight: 700;
+        }
+
+
+        .brand-icon {
+
+            width: 37px;
+
+            height: 37px;
+
+            border-radius: 11px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #5b83ff,
+                    #8059ff
+                );
+
+            box-shadow:
+                0 8px 25px rgba(91,131,255,0.30);
+        }
+
+
+        .brand span {
+
+            color: #82a7ff;
+        }
+
+
+        .security-status {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            color: #8e9aae;
+
+            font-size: 11px;
+        }
+
+
+        .status-dot {
+
+            width: 7px;
+
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #3ce18b;
+
+            box-shadow:
+                0 0 10px #3ce18b;
+        }
+
+
+        /* =====================================================
+           MAIN LAYOUT
+        ===================================================== */
+
+        .page {
+
+            min-height: 100vh;
+
+            display: grid;
+
+            grid-template-columns:
+                1fr
+                430px
+                1fr;
+
+            align-items: center;
+
+            gap: 50px;
+
+            padding: 100px 60px 40px;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        /* =====================================================
+           LEFT CONTENT
+        ===================================================== */
+
+        .intro {
+
+            max-width: 500px;
+
+            justify-self: end;
+        }
+
+
+        .intro-badge {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 7px 12px;
+
+            border-radius: 30px;
+
+            background:
+                rgba(83,119,255,0.09);
+
+            border:
+                1px solid rgba(105,137,255,0.20);
+
+            color: #88a8ff;
+
+            font-size: 10px;
+
+            letter-spacing: 1.8px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 22px;
+        }
+
+
+        .intro h1 {
+
+            font-size: clamp(
+                38px,
+                4vw,
+                58px
+            );
+
+            line-height: 1.05;
+
+            margin-bottom: 20px;
+
+            letter-spacing: -2px;
+        }
+
+
+        .gradient-text {
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #91aaff
+                );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+        }
+
+
+        .intro p {
+
+            color: #8794aa;
+
+            line-height: 1.8;
+
+            font-size: 14px;
+
+            max-width: 440px;
+        }
+
+
+        /* =====================================================
+           SECURITY FEATURES
+        ===================================================== */
+
+        .security-features {
+
+            display: flex;
+
+            gap: 10px;
+
+            margin-top: 28px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .feature {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding: 9px 12px;
+
+            border-radius: 9px;
+
+            background:
+                rgba(255,255,255,0.035);
+
+            border:
+                1px solid rgba(255,255,255,0.07);
+
+            color: #8996aa;
+
+            font-size: 10px;
+        }
+
+
+        .feature-icon {
+
+            color: #6f96ff;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           LOGIN CARD
+        ===================================================== */
+
+        .login-card {
+
+            width: 100%;
+
+            padding: 32px;
+
+            border-radius: 25px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(27,39,65,0.88),
+                    rgba(12,20,37,0.90)
+                );
+
+            border:
+                1px solid rgba(255,255,255,0.12);
+
+            box-shadow:
+
+                0 35px 90px
+                rgba(0,0,0,0.40),
+
+                inset 0 1px 0
+                rgba(255,255,255,0.04);
+
+            backdrop-filter: blur(20px);
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        /* Top glow */
+
+        .login-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 180px;
+
+            height: 180px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(87,119,255,0.13);
+
+            filter: blur(60px);
+
+            top: -100px;
+
+            right: -70px;
+        }
+
+
+        /* =====================================================
+           LOGIN HEADER
+        ===================================================== */
+
+        .login-header {
+
+            text-align: center;
+
+            position: relative;
+
+            z-index: 2;
+
+            margin-bottom: 27px;
+        }
+
+
+        .login-icon {
+
+            width: 58px;
+
+            height: 58px;
+
+            margin: 0 auto 16px;
+
+            border-radius: 18px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 25px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(88,130,255,0.25),
+                    rgba(128,83,255,0.22)
+                );
+
+            border:
+                1px solid rgba(122,150,255,0.30);
+
+            box-shadow:
+                0 10px 35px rgba(78,107,255,0.20);
+        }
+
+
+        .login-header h2 {
+
+            font-size: 25px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .login-header p {
+
+            color: #7f8da4;
+
+            font-size: 11px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =====================================================
+           FLASH MESSAGES
+        ===================================================== */
+
+        .flash-container {
+
+            margin-bottom: 18px;
+
+            position: relative;
+
+            z-index: 5;
+        }
+
+
+        .flash {
+
+            padding: 11px 13px;
+
+            border-radius: 10px;
+
+            font-size: 11px;
+
+            line-height: 1.5;
+
+            margin-bottom: 8px;
+
+            background:
+                rgba(255,77,95,0.10);
+
+            border:
+                1px solid rgba(255,77,95,0.20);
+
+            color: #ff9ba7;
+        }
+
+
+        /* =====================================================
+           FORM
+        ===================================================== */
+
+        .form-group {
+
+            margin-bottom: 18px;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        .form-label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #b0bbcc;
+
+            font-size: 11px;
+
+            font-weight: 600;
+        }
+
+
+        .input-wrapper {
+
+            position: relative;
+        }
+
+
+        .input-icon {
+
+            position: absolute;
+
+            left: 14px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: #65748b;
+
+            font-size: 15px;
+
+            pointer-events: none;
+        }
+
+
+        .input {
+
+            width: 100%;
+
+            padding: 13px 14px 13px 42px;
+
+            border-radius: 11px;
+
+            border:
+                1px solid rgba(255,255,255,0.10);
+
+            outline: none;
+
+            background:
+                rgba(3,9,19,0.45);
+
+            color: white;
+
+            font-size: 12px;
+
+            transition: 0.25s;
+        }
+
+
+        .input::placeholder {
+
+            color: #56647a;
+        }
+
+
+        .input:focus {
+
+            border-color:
+                rgba(102,137,255,0.65);
+
+            background:
+                rgba(4,11,24,0.65);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(83,117,255,0.08);
+        }
+
+
+        /* =====================================================
+           PASSWORD TOGGLE
+        ===================================================== */
+
+        .password-toggle {
+
+            position: absolute;
+
+            right: 12px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            border: none;
+
+            background: none;
+
+            color: #65748b;
+
+            cursor: pointer;
+
+            font-size: 14px;
+        }
+
+
+        .password-toggle:hover {
+
+            color: #91aaff;
+        }
+
+
+        /* =====================================================
+           LOGIN BUTTON
+        ===================================================== */
+
+        .login-button {
+
+            width: 100%;
+
+            padding: 14px;
+
+            margin-top: 5px;
+
+            border: none;
+
+            border-radius: 11px;
+
+            color: white;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #477dff,
+                    #8058ff
+                );
+
+            box-shadow:
+                0 12px 30px
+                rgba(73,105,255,0.24);
+
+            transition:
+                transform 0.2s,
+                box-shadow 0.2s;
+        }
+
+
+        .login-button:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 18px 38px
+                rgba(73,105,255,0.35);
+        }
+
+
+        .login-button:active {
+
+            transform: translateY(0);
+        }
+
+
+        /* =====================================================
+           DIVIDER
+        ===================================================== */
+
+        .divider {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin: 23px 0;
+
+            color: #58667c;
+
+            font-size: 9px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+        }
+
+
+        .divider::before,
+        .divider::after {
+
+            content: "";
+
+            height: 1px;
+
+            flex: 1;
+
+            background:
+                rgba(255,255,255,0.07);
+        }
+
+
+        /* =====================================================
+           HOME BUTTON
+        ===================================================== */
+
+        .home-button {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            width: 100%;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            text-decoration: none;
+
+            color: #a3afc1;
+
+            background:
+                rgba(255,255,255,0.04);
+
+            border:
+                1px solid rgba(255,255,255,0.07);
+
+            font-size: 11px;
+
+            transition: 0.2s;
+        }
+
+
+        .home-button:hover {
+
+            color: white;
+
+            background:
+                rgba(255,255,255,0.08);
+        }
+
+
+        /* =====================================================
+           CARD FOOTER
+        ===================================================== */
+
+        .card-footer {
+
+            text-align: center;
+
+            margin-top: 20px;
+
+            color: #56647a;
+
+            font-size: 9px;
+
+            line-height: 1.6;
+        }
+
+
+        .secure {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 6px;
+
+            margin-top: 9px;
+
+            color: #64738a;
+        }
+
+
+        .secure span {
+
+            color: #43d98b;
+        }
+
+
+        /* =====================================================
+           RIGHT SIDE DECORATION
+        ===================================================== */
+
+        .visual {
+
+            justify-self: start;
+
+            width: 310px;
+
+            height: 430px;
+
+            position: relative;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+        }
+
+
+        .visual-ring {
+
+            position: absolute;
+
+            border-radius: 50%;
+
+            border:
+                1px solid rgba(103,135,255,0.15);
+        }
+
+
+        .ring-one {
+
+            width: 310px;
+
+            height: 310px;
+
+            animation:
+                rotate 18s linear infinite;
+        }
+
+
+        .ring-two {
+
+            width: 230px;
+
+            height: 230px;
+
+            border-style: dashed;
+
+            animation:
+                rotateReverse 14s linear infinite;
+        }
+
+
+        .ring-three {
+
+            width: 155px;
+
+            height: 155px;
+
+            border:
+                1px solid rgba(120,94,255,0.25);
+
+            box-shadow:
+                0 0 50px
+                rgba(87,110,255,0.10);
+        }
+
+
+        .core {
+
+            width: 90px;
+
+            height: 90px;
+
+            border-radius: 25px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 35px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(82,126,255,0.20),
+                    rgba(125,78,255,0.20)
+                );
+
+            border:
+                1px solid rgba(123,151,255,0.30);
+
+            box-shadow:
+                0 0 50px
+                rgba(77,115,255,0.20);
+        }
+
+
+        .orbit-dot {
+
+            position: absolute;
+
+            width: 7px;
+
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #7197ff;
+
+            box-shadow:
+                0 0 12px #7197ff;
+        }
+
+
+        .dot-one {
+
+            top: 55px;
+
+            right: 65px;
+        }
+
+
+        .dot-two {
+
+            bottom: 80px;
+
+            left: 48px;
+
+            background: #9a73ff;
+
+            box-shadow:
+                0 0 12px #9a73ff;
+        }
+
+
+        @keyframes rotate {
+
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+
+        @keyframes rotateReverse {
+
+            from {
+                transform: rotate(360deg);
+            }
+
+            to {
+                transform: rotate(0deg);
+            }
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media(max-width:1100px) {
+
+            .page {
+
+                grid-template-columns:
+                    1fr
+                    minmax(350px, 430px)
+                    1fr;
+            }
+
+            .intro {
+
+                display: none;
+            }
+
+            .visual {
+
+                display: none;
+            }
+
+            .page {
+
+                justify-content: center;
+            }
+
+        }
+
+
+        @media(max-width:600px) {
+
+            .navbar {
+
+                width: calc(100% - 30px);
+
+                top: 15px;
+            }
+
+            .security-status {
+
+                display: none;
+            }
+
+            .page {
+
+                padding:
+                    95px 18px 30px;
+            }
+
+            .login-card {
+
+                padding: 25px 21px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- Background -->
+
+    <div class="orb orb-one"></div>
+
+    <div class="orb orb-two"></div>
+
+
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <nav class="navbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                ✦
+            </div>
+
+            Truth<span>AI</span>
+
+        </div>
+
+
+        <div class="security-status">
+
+            <span class="status-dot"></span>
+
+            Secure Authentication
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- =====================================================
+         PAGE
+    ====================================================== -->
+
+    <main class="page">
+
+
+        <!-- =================================================
+             LEFT
+        ================================================== -->
+
+        <section class="intro">
+
+            <div class="intro-badge">
+
+                <span>✦</span>
+
+                Intelligent Verification Platform
+
+            </div>
+
+
+            <h1>
+
+                Welcome back to
+
+                <span class="gradient-text">
+                    TruthAI.
+                </span>
+
+            </h1>
+
+
+            <p>
+
+                Sign in to access your AI-powered
+                information verification workspace.
+                Analyze news, inspect images and
+                explore intelligent detection tools
+                from one secure platform.
+
+            </p>
+
+
+            <div class="security-features">
+
+                <div class="feature">
+
+                    <span class="feature-icon">
+                        ◈
+                    </span>
+
+                    AI Detection
+
+                </div>
+
+
+                <div class="feature">
+
+                    <span class="feature-icon">
+                        ◉
+                    </span>
+
+                    Image Forensics
+
+                </div>
+
+
+                <div class="feature">
+
+                    <span class="feature-icon">
+                        ◇
+                    </span>
+
+                    Secure Access
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             LOGIN CARD
+        ================================================== -->
+
+        <section class="login-card">
+
+
+            <div class="login-header">
+
+                <div class="login-icon">
+                    🔐
+                </div>
+
+
+                <h2>
+                    Sign In
+                </h2>
+
+
+                <p>
+                    Access your verification dashboard
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 FLASH MESSAGES
+            ================================================== -->
+
+            {% with messages = get_flashed_messages(
+                with_categories=true
+            ) %}
+
+                {% if messages %}
+
+                    <div class="flash-container">
+
+                        {% for category, message in messages %}
+
+                            <div class="flash">
+
+                                {{ message }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            {% endwith %}
+
+
+
+            <!-- =================================================
+                 LOGIN FORM
+            ================================================== -->
+
+            <form
+                action="{{ url_for('login') }}"
+                method="POST"
+            >
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label
+                        class="form-label"
+                        for="email"
+                    >
+                        Email Address
+                    </label>
+
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            ✉
+                        </span>
+
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="input"
+                            placeholder="Enter your email"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label
+                        class="form-label"
+                        for="password"
+                    >
+                        Password
+                    </label>
+
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            🔒
+                        </span>
+
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="input"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            id="passwordToggle"
+                            aria-label="Show password"
+                        >
+                            ◉
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- LOGIN -->
+
+                <button
+                    type="submit"
+                    class="login-button"
+                >
+
+                    Sign In to TruthAI
+                    &nbsp; →
+
+                </button>
+
+            </form>
+
+
+
+            <!-- DIVIDER -->
+
+            <div class="divider">
+
+                Secure Workspace
+
+            </div>
+
+
+
+            <!-- HOME -->
+
+            <a
+                href="{{ url_for('index') }}"
+                class="home-button"
+            >
+
+                ←
+
+                Return to Home
+
+            </a>
+
+
+
+            <!-- FOOTER -->
+
+            <div class="card-footer">
+
+                Your session is protected by secure
+                authentication.
+
+                <div class="secure">
+
+                    <span>●</span>
+
+                    Connection protected
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             RIGHT VISUAL
+        ================================================== -->
+
+        <section class="visual">
+
+            <div class="visual-ring ring-one"></div>
+
+            <div class="visual-ring ring-two"></div>
+
+            <div class="visual-ring ring-three"></div>
+
+
+            <div class="orbit-dot dot-one"></div>
+
+            <div class="orbit-dot dot-two"></div>
+
+
+            <div class="core">
+
+                ✦
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+        const password =
+            document.getElementById(
+                "password"
+            );
+
+
+        const passwordToggle =
+            document.getElementById(
+                "passwordToggle"
+            );
+
+
+        passwordToggle.addEventListener(
+            "click",
+            function() {
+
+                if (
+                    password.type === "password"
+                ) {
+
+                    password.type =
+                        "text";
+
+                    passwordToggle.textContent =
+                        "◉";
+
+                    passwordToggle.style.color =
+                        "#8da9ff";
+
+                }
+
+                else {
+
+                    password.type =
+                        "password";
+
+                    passwordToggle.textContent =
+                        "◉";
+
+                    passwordToggle.style.color =
+                        "#65748b";
+
+                }
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>

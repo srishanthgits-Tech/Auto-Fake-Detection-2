@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TruthAI | Verification Report</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(5, 10, 25, 0.96),
+                    rgba(10, 25, 55, 0.93)
+                ),
+                url("{{ url_for('static', filename='img.jpg') }}");
+
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+
+            color: white;
+
+            padding: 30px;
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+
+            width: 100%;
+            max-width: 1200px;
+
+            margin: 0 auto 30px auto;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 18px 25px;
+
+            background: rgba(255,255,255,0.08);
+
+            border: 1px solid rgba(255,255,255,0.12);
+
+            border-radius: 18px;
+
+            backdrop-filter: blur(15px);
+        }
+
+
+        .logo {
+
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+
+        .logo-icon {
+
+            width: 38px;
+            height: 38px;
+
+            border-radius: 12px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: linear-gradient(
+                135deg,
+                #4f8cff,
+                #7c5cff
+            );
+
+            box-shadow:
+                0 5px 20px rgba(79,140,255,0.35);
+        }
+
+
+        .logo span {
+            color: #79a9ff;
+        }
+
+
+        .nav-status {
+
+            display: flex;
+            align-items: center;
+
+            gap: 8px;
+
+            font-size: 13px;
+
+            color: #b8c4d9;
+        }
+
+
+        .online-dot {
+
+            width: 9px;
+            height: 9px;
+
+            border-radius: 50%;
+
+            background: #35d07f;
+
+            box-shadow:
+                0 0 10px #35d07f;
+        }
+
+
+        /* =========================
+           MAIN CARD
+        ========================= */
+
+        .container {
+
+            max-width: 900px;
+
+            margin: auto;
+
+            padding: 35px;
+
+            background: rgba(255,255,255,0.08);
+
+            border: 1px solid rgba(255,255,255,0.13);
+
+            border-radius: 25px;
+
+            backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 25px 70px rgba(0,0,0,0.35);
+        }
+
+
+        .top-label {
+
+            text-align: center;
+
+            color: #7ca8ff;
+
+            font-size: 13px;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 10px;
+        }
+
+
+        h1 {
+
+            text-align: center;
+
+            font-size: 34px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .subtitle {
+
+            text-align: center;
+
+            color: #aebbd0;
+
+            margin-bottom: 30px;
+        }
+
+
+        /* =========================
+           TOPIC
+        ========================= */
+
+        .topic-card {
+
+            background: rgba(0,0,0,0.20);
+
+            border: 1px solid rgba(255,255,255,0.10);
+
+            border-radius: 15px;
+
+            padding: 18px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .topic-label {
+
+            font-size: 12px;
+
+            color: #8fa5c5;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .topic {
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+            color: white;
+
+            word-break: break-word;
+        }
+
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .status-box {
+
+            padding: 25px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            margin-bottom: 25px;
+
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+
+
+        .status-icon {
+
+            font-size: 45px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .status-title {
+
+            font-size: 26px;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+        }
+
+
+        .status-description {
+
+            color: #c1ccdc;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+
+            max-width: 650px;
+
+            margin: auto;
+        }
+
+
+        /* Dynamic status colors */
+
+        .status-safe {
+
+            background: rgba(36, 190, 112, 0.12);
+
+            border-color: rgba(36,190,112,0.35);
+        }
+
+
+        .status-warning {
+
+            background: rgba(255, 92, 92, 0.12);
+
+            border-color: rgba(255,92,92,0.35);
+        }
+
+
+        .status-unknown {
+
+            background: rgba(255, 193, 7, 0.10);
+
+            border-color: rgba(255,193,7,0.30);
+        }
+
+
+        /* =========================
+           WHY SECTION
+        ========================= */
+
+        .section-title {
+
+            font-size: 18px;
+
+            margin-bottom: 15px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+        }
+
+
+        .reason-card {
+
+            background: rgba(255,255,255,0.06);
+
+            border-radius: 15px;
+
+            padding: 20px;
+
+            line-height: 1.7;
+
+            color: #cbd5e5;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =========================
+           SUMMARY
+        ========================= */
+
+        .summary-card {
+
+            background: rgba(0,0,0,0.18);
+
+            border-radius: 18px;
+
+            padding: 25px;
+
+            max-height: 400px;
+
+            overflow-y: auto;
+
+            line-height: 1.8;
+
+            color: #d5ddec;
+
+            border: 1px solid rgba(255,255,255,0.08);
+
+            margin-bottom: 25px;
+        }
+
+
+        .summary-card::-webkit-scrollbar {
+
+            width: 6px;
+        }
+
+
+        .summary-card::-webkit-scrollbar-thumb {
+
+            background: #507fcf;
+
+            border-radius: 10px;
+        }
+
+
+        /* =========================
+           DISCLAIMER
+        ========================= */
+
+        .disclaimer {
+
+            font-size: 12px;
+
+            color: #8f9db3;
+
+            background: rgba(255,255,255,0.04);
+
+            border-radius: 12px;
+
+            padding: 15px;
+
+            line-height: 1.6;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        .buttons {
+
+            display: flex;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+
+            justify-content: center;
+        }
+
+
+        .btn {
+
+            padding: 13px 20px;
+
+            border-radius: 10px;
+
+            text-decoration: none;
+
+            color: white;
+
+            font-weight: bold;
+
+            border: none;
+
+            cursor: pointer;
+
+            transition: 0.25s;
+        }
+
+
+        .btn:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.25);
+        }
+
+
+        .btn-blue {
+
+            background: linear-gradient(
+                135deg,
+                #3978ff,
+                #6a5cff
+            );
+        }
+
+
+        .btn-green {
+
+            background: linear-gradient(
+                135deg,
+                #1fa463,
+                #28c77b
+            );
+        }
+
+
+        .btn-red {
+
+            background: linear-gradient(
+                135deg,
+                #e5394f,
+                #ff5268
+            );
+        }
+
+
+        .btn-share {
+
+            background: linear-gradient(
+                135deg,
+                #7657ff,
+                #a258ff
+            );
+        }
+
+
+        /* =========================
+           SHARE MODAL
+        ========================= */
+
+        .overlay {
+
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(0,0,0,0.65);
+
+            z-index: 10;
+        }
+
+
+        .share-options {
+
+            display: none;
+
+            position: fixed;
+
+            top: 50%;
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+
+            width: 340px;
+
+            background: #101a2e;
+
+            padding: 25px;
+
+            border-radius: 20px;
+
+            z-index: 20;
+
+            box-shadow:
+                0 25px 70px rgba(0,0,0,0.5);
+
+            text-align: center;
+        }
+
+
+        .share-options h3 {
+
+            margin-bottom: 20px;
+        }
+
+
+        .share-icons {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 12px;
+        }
+
+
+        .share-icon {
+
+            width: 50px;
+            height: 50px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            text-decoration: none;
+
+            font-size: 22px;
+
+            transition: 0.2s;
+        }
+
+
+        .share-icon:hover {
+
+            transform: scale(1.1);
+        }
+
+
+        .email {
+            background: #ea4335;
+        }
+
+        .whatsapp {
+            background: #25d366;
+        }
+
+        .twitter {
+            background: #1da1f2;
+        }
+
+        .facebook {
+            background: #1877f2;
+        }
+
+
+        .close-btn {
+
+            margin-top: 20px;
+
+            padding: 10px 20px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #dc3545;
+
+            color: white;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media(max-width:700px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .container {
+                padding: 22px;
+            }
+
+            h1 {
+                font-size: 27px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .navbar {
+                padding: 15px;
+            }
+
+            .nav-status {
+                display: none;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <div class="navbar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                ✦
+            </div>
+
+            Truth<span>AI</span>
+
+        </div>
+
+
+        <div class="nav-status">
+
+            <div class="online-dot"></div>
+
+            Verification Engine Active
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <div class="container">
+
+        <div class="top-label">
+            AI INFORMATION ANALYSIS
+        </div>
+
+
+        <h1>
+            Verification Report
+        </h1>
+
+
+        <p class="subtitle">
+            Analysis of the information retrieved for your topic
+        </p>
+
+
+        <!-- TOPIC -->
+
+        <div class="topic-card">
+
+            <div class="topic-label">
+                Topic Investigated
+            </div>
+
+            <div class="topic">
+                {{ topic }}
+            </div>
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        {% if status == "No Warning Found" %}
+
+        <div class="status-box status-safe">
+
+            <div class="status-icon">
+                🟢
+            </div>
+
+            <div class="status-title">
+                No Warning Found
+            </div>
+
+            <div class="status-description">
+
+                The retrieved source content did not contain
+                the warning indicators used by the current
+                analysis system.
+
+            </div>
+
+        </div>
+
+
+        {% elif status == "Potentially Misleading" %}
+
+        <div class="status-box status-warning">
+
+            <div class="status-icon">
+                ⚠️
+            </div>
+
+            <div class="status-title">
+                Potentially Misleading
+            </div>
+
+            <div class="status-description">
+
+                The retrieved content contains terms that
+                the current analysis system associates with
+                potentially misleading or disputed information.
+
+            </div>
+
+        </div>
+
+
+        {% else %}
+
+        <div class="status-box status-unknown">
+
+            <div class="status-icon">
+                🟡
+            </div>
+
+            <div class="status-title">
+                Unknown
+            </div>
+
+            <div class="status-description">
+
+                The system could not confidently analyze
+                this topic. Please verify the information
+                using additional reliable sources.
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- WHY -->
+
+        <div class="section-title">
+            🔍 Why did the system give this result?
+        </div>
+
+
+        <div class="reason-card">
+
+            {% if status == "No Warning Found" %}
+
+                The system successfully retrieved information
+                related to <strong>{{ topic }}</strong> from
+                Wikipedia.
+
+                <br><br>
+
+                During the current analysis, no predefined
+                warning keywords such as
+                <strong>hoax, fake news, misleading,
+                conspiracy theory</strong> or
+                <strong>fabricated</strong> were detected
+                in the retrieved summary.
+
+                <br><br>
+
+                Therefore, the system reports
+                <strong>"No Warning Found"</strong>.
+
+            {% elif status == "Potentially Misleading" %}
+
+                The system retrieved information related to
+                <strong>{{ topic }}</strong>.
+
+                <br><br>
+
+                The retrieved summary contains one or more
+                terms associated with potentially misleading
+                or disputed information.
+
+                <br><br>
+
+                Therefore, the system reports
+                <strong>"Potentially Misleading"</strong>.
+
+            {% else %}
+
+                The system was unable to obtain or analyze
+                reliable information for this topic.
+
+                <br><br>
+
+                Therefore, the system reports
+                <strong>"Unknown"</strong> instead of making
+                an unsupported conclusion.
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- SOURCE CONTENT -->
+
+        <div class="section-title">
+            📚 Retrieved Information
+        </div>
+
+
+        <div class="summary-card">
+
+            {{ summary }}
+
+        </div>
+
+
+        <!-- DISCLAIMER -->
+
+        <div class="disclaimer">
+
+            <strong>Important:</strong>
+
+            This result is a source-based analysis and is
+            <strong>not definitive proof that a news claim is
+            true or false</strong>.
+
+            The current system checks retrieved information
+            against predefined warning indicators. For
+            important claims, verify the information with
+            multiple reliable sources.
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="buttons">
+
+            <button
+                class="btn btn-share"
+                onclick="showShareOptions()">
+
+                🔗 Share Result
+
+            </button>
+
+
+            <a
+                href="{{ url_for('download_article', topic=topic) }}"
+                target="_blank"
+                class="btn btn-blue">
+
+                📥 Download Article
+
+            </a>
+
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="btn btn-green">
+
+                🔍 Check Another Topic
+
+            </a>
+
+
+            <a
+                href="{{ url_for('logout') }}"
+                class="btn btn-red">
+
+                🚪 Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         SHARE MODAL
+    ========================== -->
+
+    <div
+        class="share-options"
+        id="shareModal">
+
+        <h3>
+            Share Verification Result
+        </h3>
+
+
+        <div class="share-icons">
+
+            <a
+                href="#"
+                target="_blank"
+                id="share-email"
+                class="share-icon email">
+
+                📧
+
+            </a>
+
+
+            <a
+                href="#"
+                target="_blank"
+                id="share-whatsapp"
+                class="share-icon whatsapp">
+
+                📱
+
+            </a>
+
+
+            <a
+                href="#"
+                target="_blank"
+                id="share-twitter"
+                class="share-icon twitter">
+
+                🐦
+
+            </a>
+
+
+            <a
+                href="#"
+                target="_blank"
+                id="share-facebook"
+                class="share-icon facebook">
+
+                📘
+
+            </a>
+
+        </div>
+
+
+        <button
+            class="close-btn"
+            onclick="closeShareOptions()">
+
+            Close
+
+        </button>
+
+    </div>
+
+
+    <div
+        class="overlay"
+        id="overlay"
+        onclick="closeShareOptions()">
+    </div>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+        function showShareOptions() {
+
+            document.getElementById("shareModal").style.display = "block";
+
+            document.getElementById("overlay").style.display = "block";
+
+
+            let topic =
+                encodeURIComponent(
+                    {{ topic|tojson }}
+                );
+
+
+            let summary =
+                encodeURIComponent(
+                    {{ summary|tojson }}
+                );
+
+
+            let shareUrl =
+                encodeURIComponent(
+                    window.location.href
+                );
+
+
+            document.getElementById("share-email").href =
+                `mailto:?subject=TruthAI Verification: ${topic}&body=${summary} - ${shareUrl}`;
+
+
+            document.getElementById("share-whatsapp").href =
+                `https://wa.me/?text=TruthAI Verification: ${topic} - ${summary} - ${shareUrl}`;
+
+
+            document.getElementById("share-twitter").href =
+                `https://twitter.com/intent/tweet?text=TruthAI Verification: ${topic} - ${shareUrl}`;
+
+
+            document.getElementById("share-facebook").href =
+                `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
+
+        }
+
+
+        function closeShareOptions() {
+
+            document.getElementById("shareModal").style.display = "none";
+
+            document.getElementById("overlay").style.display = "none";
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

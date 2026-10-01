@@ -1,0 +1,2300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>TruthAI | Create Your Identity</title>
+
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        /* =====================================================
+           BODY
+        ===================================================== */
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                Inter,
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            color: white;
+
+            background:
+                radial-gradient(
+                    circle at 15% 50%,
+                    rgba(65, 108, 255, 0.15),
+                    transparent 32%
+                ),
+
+                radial-gradient(
+                    circle at 85% 20%,
+                    rgba(135, 76, 255, 0.13),
+                    transparent 30%
+                ),
+
+                linear-gradient(
+                    135deg,
+                    #050a17,
+                    #0a1223 50%,
+                    #070d1b
+                );
+
+            overflow-x: hidden;
+        }
+
+
+        /* =====================================================
+           ANIMATED GRID
+        ===================================================== */
+
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            opacity: 0.13;
+
+            background-image:
+
+                linear-gradient(
+                    rgba(255,255,255,0.045) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.045) 1px,
+                    transparent 1px
+                );
+
+            background-size: 55px 55px;
+
+            animation:
+                gridMove 18s linear infinite;
+        }
+
+
+        @keyframes gridMove {
+
+            from {
+                background-position: 0 0;
+            }
+
+            to {
+                background-position: 55px 55px;
+            }
+
+        }
+
+
+        /* =====================================================
+           FLOATING PARTICLES
+        ===================================================== */
+
+        .particles {
+
+            position: fixed;
+
+            inset: 0;
+
+            overflow: hidden;
+
+            pointer-events: none;
+        }
+
+
+        .particle {
+
+            position: absolute;
+
+            width: 4px;
+
+            height: 4px;
+
+            border-radius: 50%;
+
+            background: #7198ff;
+
+            box-shadow:
+                0 0 12px #7198ff;
+
+            opacity: 0;
+
+            animation:
+                floatParticle
+                linear
+                infinite;
+        }
+
+
+        .p1 {
+            left: 8%;
+            bottom: -10px;
+            animation-duration: 8s;
+        }
+
+        .p2 {
+            left: 18%;
+            bottom: -10px;
+            animation-duration: 11s;
+            animation-delay: 2s;
+        }
+
+        .p3 {
+            left: 31%;
+            bottom: -10px;
+            animation-duration: 9s;
+            animation-delay: 1s;
+        }
+
+        .p4 {
+            left: 48%;
+            bottom: -10px;
+            animation-duration: 13s;
+            animation-delay: 4s;
+        }
+
+        .p5 {
+            left: 67%;
+            bottom: -10px;
+            animation-duration: 10s;
+            animation-delay: 2s;
+        }
+
+        .p6 {
+            left: 82%;
+            bottom: -10px;
+            animation-duration: 12s;
+            animation-delay: 3s;
+        }
+
+        .p7 {
+            left: 92%;
+            bottom: -10px;
+            animation-duration: 9s;
+            animation-delay: 5s;
+        }
+
+
+        @keyframes floatParticle {
+
+            0% {
+
+                transform:
+                    translateY(0)
+                    scale(0.3);
+
+                opacity: 0;
+
+            }
+
+            15% {
+
+                opacity: 0.8;
+
+            }
+
+            80% {
+
+                opacity: 0.5;
+
+            }
+
+            100% {
+
+                transform:
+                    translateY(-100vh)
+                    scale(1.2);
+
+                opacity: 0;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .navbar {
+
+            position: absolute;
+
+            top: 20px;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            width:
+                calc(100% - 60px);
+
+            max-width: 1280px;
+
+            padding:
+                14px 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            border-radius: 17px;
+
+            background:
+                rgba(16, 27, 48, 0.72);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.10);
+
+            backdrop-filter:
+                blur(18px);
+
+            z-index: 20;
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            font-size: 20px;
+
+            font-weight: 700;
+        }
+
+
+        .brand-icon {
+
+            width: 38px;
+
+            height: 38px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #547fff,
+                    #8658ff
+                );
+
+            box-shadow:
+                0 8px 25px
+                rgba(79,112,255,0.30);
+
+            animation:
+                brandPulse 3s ease-in-out infinite;
+        }
+
+
+        @keyframes brandPulse {
+
+            0%,100% {
+
+                box-shadow:
+                    0 8px 25px
+                    rgba(79,112,255,0.30);
+
+            }
+
+            50% {
+
+                box-shadow:
+                    0 8px 40px
+                    rgba(79,112,255,0.55);
+
+            }
+
+        }
+
+
+        .brand span {
+
+            color: #82a7ff;
+        }
+
+
+        .nav-status {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            color: #8997ac;
+
+            font-size: 11px;
+        }
+
+
+        .online-dot {
+
+            width: 7px;
+
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #3de28b;
+
+            box-shadow:
+                0 0 12px #3de28b;
+
+            animation:
+                onlinePulse 2s infinite;
+        }
+
+
+        @keyframes onlinePulse {
+
+            0%,100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.35;
+            }
+
+        }
+
+
+        /* =====================================================
+           PAGE
+        ===================================================== */
+
+        .page {
+
+            min-height: 100vh;
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(400px, 1fr)
+                minmax(400px, 500px);
+
+            gap: 70px;
+
+            align-items: center;
+
+            max-width: 1250px;
+
+            margin: auto;
+
+            padding:
+                110px 40px 40px;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        /* =====================================================
+           LEFT EXPERIENCE
+        ===================================================== */
+
+        .experience {
+
+            min-height: 600px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            position: relative;
+        }
+
+
+        .experience-text {
+
+            position: absolute;
+
+            left: 0;
+
+            top: 15%;
+
+            max-width: 330px;
+        }
+
+
+        .eyebrow {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding:
+                7px 12px;
+
+            border-radius: 30px;
+
+            color: #86a7ff;
+
+            background:
+                rgba(79,116,255,0.08);
+
+            border:
+                1px solid
+                rgba(101,135,255,0.18);
+
+            font-size: 9px;
+
+            letter-spacing: 1.8px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 20px;
+        }
+
+
+        .experience-text h1 {
+
+            font-size:
+                clamp(
+                    38px,
+                    4vw,
+                    60px
+                );
+
+            line-height: 1.02;
+
+            letter-spacing: -2px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .gradient {
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #8baaff
+                );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+        }
+
+
+        .experience-text p {
+
+            color: #7f8da4;
+
+            font-size: 13px;
+
+            line-height: 1.8;
+        }
+
+
+        /* =====================================================
+           AI CORE
+        ===================================================== */
+
+        .ai-core {
+
+            width: 300px;
+
+            height: 300px;
+
+            position: relative;
+
+            margin-left: 250px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+        }
+
+
+        .core-ring {
+
+            position: absolute;
+
+            border-radius: 50%;
+
+            border:
+                1px solid
+                rgba(103,138,255,0.16);
+        }
+
+
+        .ring-outer {
+
+            width: 300px;
+
+            height: 300px;
+
+            border-style: dashed;
+
+            animation:
+                rotate
+                22s
+                linear
+                infinite;
+        }
+
+
+        .ring-middle {
+
+            width: 220px;
+
+            height: 220px;
+
+            border:
+                1px solid
+                rgba(113,91,255,0.24);
+
+            animation:
+                rotateReverse
+                16s
+                linear
+                infinite;
+        }
+
+
+        .ring-inner {
+
+            width: 150px;
+
+            height: 150px;
+
+            border:
+                1px solid
+                rgba(83,135,255,0.28);
+
+            box-shadow:
+                0 0 50px
+                rgba(79,112,255,0.10);
+        }
+
+
+        .core {
+
+            width: 92px;
+
+            height: 92px;
+
+            border-radius: 27px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 37px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(73,119,255,0.22),
+                    rgba(128,79,255,0.22)
+                );
+
+            border:
+                1px solid
+                rgba(126,154,255,0.32);
+
+            box-shadow:
+                0 0 60px
+                rgba(72,112,255,0.20);
+
+            animation:
+                coreFloat
+                4s
+                ease-in-out
+                infinite;
+        }
+
+
+        @keyframes coreFloat {
+
+            0%,100% {
+
+                transform:
+                    translateY(0)
+                    scale(1);
+
+            }
+
+            50% {
+
+                transform:
+                    translateY(-9px)
+                    scale(1.04);
+
+            }
+
+        }
+
+
+        @keyframes rotate {
+
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+
+        @keyframes rotateReverse {
+
+            from {
+                transform: rotate(360deg);
+            }
+
+            to {
+                transform: rotate(0deg);
+            }
+
+        }
+
+
+        /* =====================================================
+           ORBIT DOTS
+        ===================================================== */
+
+        .orbit {
+
+            position: absolute;
+
+            width: 100%;
+
+            height: 100%;
+
+            animation:
+                orbitRotate
+                10s
+                linear
+                infinite;
+        }
+
+
+        .orbit-dot {
+
+            position: absolute;
+
+            width: 7px;
+
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #7199ff;
+
+            box-shadow:
+                0 0 15px #7199ff;
+        }
+
+
+        .dot-top {
+
+            top: 5px;
+
+            left: 50%;
+        }
+
+
+        .dot-bottom {
+
+            bottom: 10px;
+
+            right: 18%;
+        }
+
+
+        .dot-left {
+
+            left: 4px;
+
+            top: 45%;
+        }
+
+
+        @keyframes orbitRotate {
+
+            from {
+                transform: rotate(0);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+
+        /* =====================================================
+           SECURITY CARDS
+        ===================================================== */
+
+        .security-cards {
+
+            display: flex;
+
+            gap: 10px;
+
+            margin-top: 30px;
+
+            margin-left: 120px;
+        }
+
+
+        .security-card {
+
+            padding:
+                10px 13px;
+
+            border-radius: 10px;
+
+            background:
+                rgba(255,255,255,0.035);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.07);
+
+            color: #78869c;
+
+            font-size: 9px;
+
+            transition: 0.3s;
+        }
+
+
+        .security-card:hover {
+
+            transform:
+                translateY(-4px);
+
+            color: #a9bcff;
+
+            border-color:
+                rgba(103,135,255,0.25);
+        }
+
+
+        /* =====================================================
+           REGISTRATION CARD
+        ===================================================== */
+
+        .register-card {
+
+            padding: 32px;
+
+            border-radius: 27px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(26,39,66,0.92),
+                    rgba(10,18,34,0.94)
+                );
+
+            border:
+                1px solid
+                rgba(255,255,255,0.12);
+
+            box-shadow:
+                0 35px 100px
+                rgba(0,0,0,0.42);
+
+            backdrop-filter:
+                blur(22px);
+
+            position: relative;
+
+            overflow: hidden;
+
+            animation:
+                cardAppear
+                0.8s
+                ease;
+        }
+
+
+        @keyframes cardAppear {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(25px)
+                    scale(0.97);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+
+            }
+
+        }
+
+
+        .register-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 230px;
+
+            height: 230px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(83,118,255,0.12);
+
+            filter:
+                blur(65px);
+
+            top: -150px;
+
+            right: -90px;
+        }
+
+
+        /* =====================================================
+           CARD HEADER
+        ===================================================== */
+
+        .card-header {
+
+            text-align: center;
+
+            margin-bottom: 24px;
+
+            position: relative;
+        }
+
+
+        .register-icon {
+
+            width: 55px;
+
+            height: 55px;
+
+            border-radius: 17px;
+
+            margin:
+                0 auto 14px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 24px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(80,125,255,0.22),
+                    rgba(128,78,255,0.20)
+                );
+
+            border:
+                1px solid
+                rgba(117,149,255,0.28);
+
+            animation:
+                iconPulse
+                3s
+                ease-in-out
+                infinite;
+        }
+
+
+        @keyframes iconPulse {
+
+            0%,100% {
+
+                box-shadow:
+                    0 0 0
+                    rgba(83,125,255,0);
+
+            }
+
+            50% {
+
+                box-shadow:
+                    0 0 35px
+                    rgba(83,125,255,0.20);
+
+            }
+
+        }
+
+
+        .card-header h2 {
+
+            font-size: 23px;
+
+            margin-bottom: 6px;
+        }
+
+
+        .card-header p {
+
+            color: #78869c;
+
+            font-size: 10px;
+        }
+
+
+        /* =====================================================
+           PROGRESS
+        ===================================================== */
+
+        .progress-container {
+
+            margin-bottom: 22px;
+        }
+
+
+        .progress-info {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            color: #65738a;
+
+            font-size: 9px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .progress-bar {
+
+            width: 100%;
+
+            height: 3px;
+
+            border-radius: 10px;
+
+            background:
+                rgba(255,255,255,0.06);
+
+            overflow: hidden;
+        }
+
+
+        .progress-fill {
+
+            width: 0%;
+
+            height: 100%;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #4e82ff,
+                    #895cff
+                );
+
+            box-shadow:
+                0 0 12px
+                rgba(87,125,255,0.65);
+
+            transition:
+                width
+                0.4s
+                ease;
+        }
+
+
+        /* =====================================================
+           FORM
+        ===================================================== */
+
+        .form-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap:
+                14px;
+        }
+
+
+        .form-group {
+
+            margin-bottom: 2px;
+
+            animation:
+                fieldAppear
+                0.5s
+                ease both;
+        }
+
+
+        .full {
+
+            grid-column:
+                1 / -1;
+        }
+
+
+        .form-label {
+
+            display: block;
+
+            color: #a8b3c5;
+
+            font-size: 9px;
+
+            font-weight: 600;
+
+            margin-bottom: 7px;
+        }
+
+
+        .input-wrapper {
+
+            position: relative;
+        }
+
+
+        .input-icon {
+
+            position: absolute;
+
+            left: 12px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            color: #5f6e85;
+
+            font-size: 12px;
+
+            pointer-events: none;
+
+            transition:
+                0.2s;
+        }
+
+
+        .input {
+
+            width: 100%;
+
+            padding:
+                11px
+                11px
+                11px
+                35px;
+
+            border-radius: 9px;
+
+            outline: none;
+
+            color: white;
+
+            font-size: 10px;
+
+            background:
+                rgba(3,9,18,0.46);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.09);
+
+            transition:
+                0.25s;
+        }
+
+
+        .input::placeholder {
+
+            color: #4f5d73;
+        }
+
+
+        .input:focus {
+
+            border-color:
+                rgba(96,135,255,0.65);
+
+            background:
+                rgba(5,12,25,0.70);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(78,116,255,0.07);
+        }
+
+
+        .input:focus
+        + .input-icon {
+
+            color: #789aff;
+        }
+
+
+        /* =====================================================
+           PASSWORD
+        ===================================================== */
+
+        .password-toggle {
+
+            position: absolute;
+
+            right: 10px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            border: none;
+
+            background: none;
+
+            color: #5e6d84;
+
+            cursor: pointer;
+
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           PASSWORD STRENGTH
+        ===================================================== */
+
+        .password-strength {
+
+            height: 3px;
+
+            margin-top: 7px;
+
+            border-radius: 5px;
+
+            background:
+                rgba(255,255,255,0.06);
+
+            overflow: hidden;
+        }
+
+
+        .strength-fill {
+
+            width: 0%;
+
+            height: 100%;
+
+            transition:
+                width
+                0.3s;
+
+            background:
+                #52627b;
+        }
+
+
+        .strength-text {
+
+            font-size: 8px;
+
+            color: #59677c;
+
+            margin-top: 5px;
+        }
+
+
+        /* =====================================================
+           SUBMIT
+        ===================================================== */
+
+        .submit-button {
+
+            width: 100%;
+
+            border: none;
+
+            padding: 14px;
+
+            margin-top: 19px;
+
+            border-radius: 11px;
+
+            color: white;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #477eff,
+                    #8058ff
+                );
+
+            box-shadow:
+                0 12px 32px
+                rgba(72,104,255,0.25);
+
+            transition:
+                0.25s;
+        }
+
+
+        .submit-button:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 18px 42px
+                rgba(72,104,255,0.38);
+        }
+
+
+        .submit-button:active {
+
+            transform:
+                translateY(0);
+        }
+
+
+        /* =====================================================
+           LOGIN LINK
+        ===================================================== */
+
+        .login-link {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 17px;
+
+            color: #69788f;
+
+            text-decoration: none;
+
+            font-size: 9px;
+
+            transition:
+                0.2s;
+        }
+
+
+        .login-link strong {
+
+            color: #7f9fff;
+        }
+
+
+        .login-link:hover {
+
+            color: white;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .card-footer {
+
+            text-align: center;
+
+            margin-top: 18px;
+
+            color: #4f5e74;
+
+            font-size: 8px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media(max-width:1050px) {
+
+            .page {
+
+                grid-template-columns:
+                    1fr;
+
+                max-width: 520px;
+
+                padding:
+                    105px 20px 40px;
+            }
+
+
+            .experience {
+
+                display: none;
+            }
+
+        }
+
+
+        @media(max-width:600px) {
+
+            .navbar {
+
+                width:
+                    calc(100% - 30px);
+
+                top: 15px;
+            }
+
+
+            .nav-status {
+
+                display: none;
+            }
+
+
+            .register-card {
+
+                padding: 25px 20px;
+            }
+
+
+            .form-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .full {
+
+                grid-column:
+                    auto;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         PARTICLES
+    ====================================================== -->
+
+    <div class="particles">
+
+        <span class="particle p1"></span>
+        <span class="particle p2"></span>
+        <span class="particle p3"></span>
+        <span class="particle p4"></span>
+        <span class="particle p5"></span>
+        <span class="particle p6"></span>
+        <span class="particle p7"></span>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <nav class="navbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                ✦
+            </div>
+
+            Truth<span>AI</span>
+
+        </div>
+
+
+        <div class="nav-status">
+
+            <span class="online-dot"></span>
+
+            Secure Identity System
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- =====================================================
+         PAGE
+    ====================================================== -->
+
+    <main class="page">
+
+
+        <!-- =================================================
+             LEFT AI EXPERIENCE
+        ================================================== -->
+
+        <section class="experience">
+
+
+            <div class="experience-text">
+
+                <div class="eyebrow">
+
+                    ✦ CREATE YOUR DIGITAL IDENTITY
+
+                </div>
+
+
+                <h1>
+
+                    Enter the
+                    <span class="gradient">
+                        TruthAI
+                    </span>
+                    Network.
+
+                </h1>
+
+
+                <p>
+
+                    Create your secure account and
+                    unlock the intelligence layer of
+                    TruthAI — from news verification
+                    to AI-powered image forensics.
+
+                </p>
+
+            </div>
+
+
+
+            <!-- AI CORE -->
+
+            <div class="ai-core">
+
+
+                <div class="core-ring ring-outer"></div>
+
+                <div class="core-ring ring-middle"></div>
+
+                <div class="core-ring ring-inner"></div>
+
+
+                <div class="orbit">
+
+                    <span
+                        class="orbit-dot dot-top">
+                    </span>
+
+                    <span
+                        class="orbit-dot dot-bottom">
+                    </span>
+
+                    <span
+                        class="orbit-dot dot-left">
+                    </span>
+
+                </div>
+
+
+                <div class="core">
+
+                    ✦
+
+                </div>
+
+            </div>
+
+
+
+            <!-- SECURITY CARDS -->
+
+            <div class="security-cards">
+
+                <div class="security-card">
+
+                    🔐 Encrypted
+
+                </div>
+
+
+                <div class="security-card">
+
+                    🛡 Protected
+
+                </div>
+
+
+                <div class="security-card">
+
+                    ✦ AI Ready
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             REGISTRATION CARD
+        ================================================== -->
+
+        <section class="register-card">
+
+
+            <!-- HEADER -->
+
+            <div class="card-header">
+
+
+                <div class="register-icon">
+
+                    ✦
+
+                </div>
+
+
+                <h2>
+
+                    Create Account
+
+                </h2>
+
+
+                <p>
+
+                    Initialize your TruthAI identity
+
+                </p>
+
+            </div>
+
+
+
+            <!-- PROGRESS -->
+
+            <div class="progress-container">
+
+                <div class="progress-info">
+
+                    <span>
+                        Profile completion
+                    </span>
+
+                    <span id="progressText">
+                        0%
+                    </span>
+
+                </div>
+
+
+                <div class="progress-bar">
+
+                    <div
+                        class="progress-fill"
+                        id="progressFill">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 REGISTRATION FORM
+            ================================================== -->
+
+            <form
+                action="{{ url_for('register') }}"
+                method="POST"
+                id="registerForm"
+            >
+
+
+                <div class="form-grid">
+
+
+                    <!-- NAME -->
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="name"
+                        >
+                            Full Name
+                        </label>
+
+
+                        <div class="input-wrapper">
+
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                class="input"
+                                placeholder="Your full name"
+                                required
+                            >
+
+                            <span class="input-icon">
+                                ◉
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- EMAIL -->
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="email"
+                        >
+                            Email Address
+                        </label>
+
+
+                        <div class="input-wrapper">
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                class="input"
+                                placeholder="you@example.com"
+                                required
+                            >
+
+                            <span class="input-icon">
+                                ✉
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- PHONE -->
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="phone"
+                        >
+                            Phone Number
+                        </label>
+
+
+                        <div class="input-wrapper">
+
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                class="input"
+                                placeholder="10 digit number"
+                                required
+                            >
+
+                            <span class="input-icon">
+                                ☎
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- PASSWORD -->
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="password"
+                        >
+                            Password
+                        </label>
+
+
+                        <div class="input-wrapper">
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                class="input"
+                                placeholder="Create password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                id="passwordToggle"
+                            >
+                                ◉
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            class="password-strength"
+                        >
+
+                            <div
+                                class="strength-fill"
+                                id="strengthFill"
+                            ></div>
+
+                        </div>
+
+
+                        <div
+                            class="strength-text"
+                            id="strengthText"
+                        >
+                            Password strength
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- CITY -->
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="city"
+                        >
+                            City
+                        </label>
+
+
+                        <div class="input-wrapper">
+
+                            <input
+                                type="text"
+                                id="city"
+                                name="city"
+                                class="input"
+                                placeholder="Your city"
+                                required
+                            >
+
+                            <span class="input-icon">
+                                ◇
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- DISTRICT -->
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="district"
+                        >
+                            District
+                        </label>
+
+
+                        <div class="input-wrapper">
+
+                            <input
+                                type="text"
+                                id="district"
+                                name="district"
+                                class="input"
+                                placeholder="Your district"
+                                required
+                            >
+
+                            <span class="input-icon">
+                                ◎
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="submit"
+                    class="submit-button"
+                    id="submitButton"
+                >
+
+                    ✦ Create My TruthAI Identity
+                    &nbsp; →
+
+                </button>
+
+            </form>
+
+
+
+            <!-- LOGIN -->
+
+            <a
+                href="{{ url_for('login') }}"
+                class="login-link"
+            >
+
+                Already have an account?
+
+                <strong>
+                    Sign in
+                </strong>
+
+            </a>
+
+
+
+            <!-- FOOTER -->
+
+            <div class="card-footer">
+
+                Your information is used only to
+                create and secure your account.
+
+                <br>
+
+                <span style="color:#43d98b;">
+                    ●
+                </span>
+
+                Secure registration environment
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+
+        /* =================================================
+           ELEMENTS
+        ================================================= */
+
+        const form =
+            document.getElementById(
+                "registerForm"
+            );
+
+
+        const inputs =
+            form.querySelectorAll(
+                "input"
+            );
+
+
+        const progressFill =
+            document.getElementById(
+                "progressFill"
+            );
+
+
+        const progressText =
+            document.getElementById(
+                "progressText"
+            );
+
+
+        const password =
+            document.getElementById(
+                "password"
+            );
+
+
+        const passwordToggle =
+            document.getElementById(
+                "passwordToggle"
+            );
+
+
+        const strengthFill =
+            document.getElementById(
+                "strengthFill"
+            );
+
+
+        const strengthText =
+            document.getElementById(
+                "strengthText"
+            );
+
+
+        /* =================================================
+           PASSWORD SHOW / HIDE
+        ================================================= */
+
+        passwordToggle.addEventListener(
+            "click",
+            function() {
+
+                if (
+                    password.type ===
+                    "password"
+                ) {
+
+                    password.type =
+                        "text";
+
+                    passwordToggle.style.color =
+                        "#8ba7ff";
+
+                }
+
+                else {
+
+                    password.type =
+                        "password";
+
+                    passwordToggle.style.color =
+                        "#5e6d84";
+
+                }
+
+            }
+        );
+
+
+        /* =================================================
+           PASSWORD STRENGTH
+        ================================================= */
+
+        password.addEventListener(
+            "input",
+            function() {
+
+                const value =
+                    password.value;
+
+                let score = 0;
+
+
+                if (
+                    value.length >= 6
+                ) {
+                    score++;
+                }
+
+
+                if (
+                    /[A-Z]/.test(value)
+                ) {
+                    score++;
+                }
+
+
+                if (
+                    /[0-9]/.test(value)
+                ) {
+                    score++;
+                }
+
+
+                if (
+                    /[^A-Za-z0-9]/.test(value)
+                ) {
+                    score++;
+                }
+
+
+                const widths = [
+                    "0%",
+                    "25%",
+                    "50%",
+                    "75%",
+                    "100%"
+                ];
+
+
+                strengthFill.style.width =
+                    widths[score];
+
+
+                if (score === 0) {
+
+                    strengthText.textContent =
+                        "Password strength";
+
+                }
+
+                else if (score === 1) {
+
+                    strengthText.textContent =
+                        "Weak password";
+
+                    strengthFill.style.background =
+                        "#ff5d70";
+
+                }
+
+                else if (score === 2) {
+
+                    strengthText.textContent =
+                        "Fair password";
+
+                    strengthFill.style.background =
+                        "#e9a83a";
+
+                }
+
+                else if (score === 3) {
+
+                    strengthText.textContent =
+                        "Good password";
+
+                    strengthFill.style.background =
+                        "#5e9cff";
+
+                }
+
+                else {
+
+                    strengthText.textContent =
+                        "Strong password";
+
+                    strengthFill.style.background =
+                        "#40df91";
+
+                }
+
+            }
+        );
+
+
+        /* =================================================
+           PROFILE PROGRESS
+        ================================================= */
+
+        function updateProgress() {
+
+            let completed = 0;
+
+
+            inputs.forEach(
+                function(input) {
+
+                    if (
+                        input.value.trim() !== ""
+                    ) {
+
+                        completed++;
+
+                    }
+
+                }
+            );
+
+
+            const total =
+                inputs.length;
+
+
+            const percentage =
+                Math.round(
+                    (completed / total) * 100
+                );
+
+
+            progressFill.style.width =
+                percentage + "%";
+
+
+            progressText.textContent =
+                percentage + "%";
+
+        }
+
+
+        inputs.forEach(
+            function(input) {
+
+                input.addEventListener(
+                    "input",
+                    updateProgress
+                );
+
+            }
+        );
+
+
+        /* =================================================
+           SUBMIT ANIMATION
+        ================================================= */
+
+        form.addEventListener(
+            "submit",
+            function() {
+
+                const button =
+                    document.getElementById(
+                        "submitButton"
+                    );
+
+
+                button.innerHTML =
+                    "⏳ Initializing Identity...";
+
+
+                button.style.opacity =
+                    "0.75";
+
+
+                button.style.pointerEvents =
+                    "none";
+
+            }
+        );
+
+
+        /* =================================================
+           FIELD STAGGER ANIMATION
+        ================================================= */
+
+        document
+            .querySelectorAll(
+                ".form-group"
+            )
+            .forEach(
+                function(element, index) {
+
+                    element.style.animationDelay =
+                        (index * 0.07) + "s";
+
+                }
+            );
+
+
+    </script>
+
+
+</body>
+
+</html>

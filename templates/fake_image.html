@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>TruthAI | Image Forensics</title>
+
+
+    <style>
+
+        /* =====================================================
+           GLOBAL
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                Inter,
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            color: white;
+
+            background:
+
+                radial-gradient(
+                    circle at 15% 20%,
+                    rgba(79, 124, 255, 0.15),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    circle at 85% 80%,
+                    rgba(122, 77, 255, 0.13),
+                    transparent 30%
+                ),
+
+                linear-gradient(
+                    135deg,
+                    #070d1c,
+                    #0d1528 50%,
+                    #08101f
+                );
+
+            overflow-x: hidden;
+        }
+
+
+        /* =====================================================
+           BACKGROUND GRID
+        ===================================================== */
+
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            opacity: 0.12;
+
+            background-image:
+
+                linear-gradient(
+                    rgba(255,255,255,0.05) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.05) 1px,
+                    transparent 1px
+                );
+
+            background-size: 45px 45px;
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .navbar {
+
+            width: calc(100% - 60px);
+
+            max-width: 1250px;
+
+            margin: 20px auto;
+
+            padding: 15px 22px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            border-radius: 18px;
+
+            background:
+                rgba(18, 28, 50, 0.72);
+
+            border:
+                1px solid rgba(255,255,255,0.12);
+
+            backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 15px 50px rgba(0,0,0,0.25);
+
+            position: relative;
+
+            z-index: 10;
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            font-size: 21px;
+
+            font-weight: 700;
+        }
+
+
+        .brand-icon {
+
+            width: 38px;
+
+            height: 38px;
+
+            border-radius: 12px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #5c82ff,
+                    #8b5cff
+                );
+
+            box-shadow:
+                0 8px 25px rgba(91,120,255,0.35);
+        }
+
+
+        .brand span {
+
+            color: #82a7ff;
+        }
+
+
+        .nav-right {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+
+            color: #9eabc0;
+
+            font-size: 12px;
+        }
+
+
+        .status-dot {
+
+            width: 8px;
+
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: #36df88;
+
+            box-shadow:
+                0 0 12px #36df88;
+        }
+
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .main {
+
+            max-width: 1250px;
+
+            margin: 55px auto;
+
+            padding: 0 30px;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        .heading {
+
+            text-align: center;
+
+            margin-bottom: 45px;
+        }
+
+
+        .eyebrow {
+
+            display: inline-block;
+
+            padding: 7px 13px;
+
+            border-radius: 30px;
+
+            background:
+                rgba(94, 128, 255, 0.10);
+
+            border:
+                1px solid rgba(111,140,255,0.25);
+
+            color: #86a9ff;
+
+            font-size: 11px;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 17px;
+        }
+
+
+        .heading h1 {
+
+            font-size: clamp(
+                34px,
+                5vw,
+                58px
+            );
+
+            line-height: 1.05;
+
+            margin-bottom: 15px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #9ebcff
+                );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+        }
+
+
+        .heading p {
+
+            color: #8e9bb0;
+
+            max-width: 620px;
+
+            margin: auto;
+
+            line-height: 1.7;
+
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           WORKSPACE
+        ===================================================== */
+
+        .workspace {
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.6fr)
+                minmax(300px, 0.8fr);
+
+            gap: 25px;
+        }
+
+
+        /* =====================================================
+           UPLOAD PANEL
+        ===================================================== */
+
+        .upload-panel {
+
+            min-height: 500px;
+
+            border-radius: 28px;
+
+            padding: 30px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(25,37,63,0.85),
+                    rgba(12,21,39,0.85)
+                );
+
+            border:
+                1px solid rgba(255,255,255,0.10);
+
+            box-shadow:
+                0 30px 80px rgba(0,0,0,0.30);
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .upload-panel::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 300px;
+
+            height: 300px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(79,124,255,0.08);
+
+            filter: blur(60px);
+
+            top: -120px;
+
+            right: -100px;
+        }
+
+
+        .panel-top {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+
+        .panel-title {
+
+            font-size: 18px;
+
+            font-weight: 600;
+        }
+
+
+        .panel-number {
+
+            color: #6f91ff;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* =====================================================
+           DROP ZONE
+        ===================================================== */
+
+        .drop-zone {
+
+            min-height: 360px;
+
+            border-radius: 22px;
+
+            border:
+                1px dashed rgba(121,153,255,0.42);
+
+            background:
+                rgba(5,11,23,0.55);
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            text-align: center;
+
+            cursor: pointer;
+
+            position: relative;
+
+            overflow: hidden;
+
+            transition:
+                0.3s ease;
+        }
+
+
+        .drop-zone:hover {
+
+            border-color: #6f91ff;
+
+            background:
+                rgba(65,91,170,0.10);
+
+            transform: translateY(-2px);
+        }
+
+
+        .drop-zone.dragging {
+
+            border-color: #51a5ff;
+
+            background:
+                rgba(71,119,255,0.15);
+
+            box-shadow:
+                inset 0 0 50px rgba(79,124,255,0.08);
+        }
+
+
+        /* =====================================================
+           SCANNER
+        ===================================================== */
+
+        .scanner {
+
+            width: 125px;
+
+            height: 125px;
+
+            border-radius: 25px;
+
+            position: relative;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            margin-bottom: 25px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(84,117,255,0.20),
+                    rgba(139,92,255,0.12)
+                );
+
+            border:
+                1px solid rgba(125,150,255,0.30);
+
+            box-shadow:
+                0 0 45px rgba(78,113,255,0.12);
+        }
+
+
+        .scanner::before {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 10px;
+
+            border-radius: 18px;
+
+            border:
+                1px solid rgba(120,150,255,0.22);
+        }
+
+
+        .scanner-icon {
+
+            font-size: 46px;
+
+            filter:
+                drop-shadow(
+                    0 0 15px
+                    rgba(104,145,255,0.7)
+                );
+        }
+
+
+        .scan-line {
+
+            position: absolute;
+
+            left: 12px;
+
+            right: 12px;
+
+            height: 2px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    #6fa2ff,
+                    transparent
+                );
+
+            box-shadow:
+                0 0 12px #6fa2ff;
+
+            animation:
+                scan 2.2s infinite ease-in-out;
+        }
+
+
+        @keyframes scan {
+
+            0% {
+                top: 15px;
+            }
+
+            50% {
+                top: 108px;
+            }
+
+            100% {
+                top: 15px;
+            }
+        }
+
+
+        .drop-title {
+
+            font-size: 20px;
+
+            font-weight: 600;
+
+            margin-bottom: 8px;
+        }
+
+
+        .drop-description {
+
+            color: #8492a8;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+            margin-bottom: 20px;
+        }
+
+
+        .choose-button {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 12px 20px;
+
+            border-radius: 10px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #467cff,
+                    #7858ff
+                );
+
+            font-weight: 600;
+
+            font-size: 13px;
+
+            box-shadow:
+                0 10px 30px rgba(72,102,255,0.25);
+
+            transition: 0.25s;
+        }
+
+
+        .choose-button:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 15px 35px rgba(72,102,255,0.38);
+        }
+
+
+        .file-input {
+
+            display: none;
+        }
+
+
+        /* =====================================================
+           PREVIEW
+        ===================================================== */
+
+        .preview {
+
+            display: none;
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                #091122;
+
+            z-index: 5;
+
+            padding: 15px;
+        }
+
+
+        .preview img {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: contain;
+
+            border-radius: 15px;
+        }
+
+
+        .preview-close {
+
+            position: absolute;
+
+            top: 20px;
+
+            right: 20px;
+
+            width: 35px;
+
+            height: 35px;
+
+            border-radius: 50%;
+
+            border: none;
+
+            background:
+                rgba(0,0,0,0.65);
+
+            color: white;
+
+            cursor: pointer;
+
+            z-index: 10;
+        }
+
+
+        /* =====================================================
+           ANALYZE BUTTON
+        ===================================================== */
+
+        .analyze-button {
+
+            width: 100%;
+
+            margin-top: 20px;
+
+            padding: 16px;
+
+            border: none;
+
+            border-radius: 13px;
+
+            color: white;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #467cff,
+                    #8257ff
+                );
+
+            box-shadow:
+                0 12px 30px rgba(73,103,255,0.25);
+
+            transition: 0.25s;
+        }
+
+
+        .analyze-button:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 18px 40px rgba(73,103,255,0.35);
+        }
+
+
+        /* =====================================================
+           INFORMATION PANEL
+        ===================================================== */
+
+        .info-panel {
+
+            border-radius: 28px;
+
+            padding: 30px;
+
+            background:
+                rgba(18,29,49,0.75);
+
+            border:
+                1px solid rgba(255,255,255,0.09);
+
+            backdrop-filter: blur(15px);
+        }
+
+
+        .info-header {
+
+            margin-bottom: 28px;
+        }
+
+
+        .info-header h2 {
+
+            font-size: 20px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .info-header p {
+
+            color: #8290a5;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =====================================================
+           FEATURE ITEMS
+        ===================================================== */
+
+        .feature {
+
+            display: flex;
+
+            gap: 14px;
+
+            padding: 17px 0;
+
+            border-bottom:
+                1px solid rgba(255,255,255,0.07);
+        }
+
+
+        .feature:last-child {
+
+            border-bottom: none;
+        }
+
+
+        .feature-icon {
+
+            width: 40px;
+
+            height: 40px;
+
+            flex-shrink: 0;
+
+            border-radius: 11px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                rgba(90,124,255,0.12);
+
+            border:
+                1px solid rgba(104,135,255,0.18);
+
+            font-size: 18px;
+        }
+
+
+        .feature h3 {
+
+            font-size: 14px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .feature p {
+
+            color: #7f8da2;
+
+            font-size: 11px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =====================================================
+           RESULT
+        ===================================================== */
+
+        .result-box {
+
+            margin-top: 28px;
+
+            padding: 18px;
+
+            border-radius: 16px;
+
+            background:
+                rgba(255,255,255,0.04);
+
+            border:
+                1px solid rgba(255,255,255,0.08);
+        }
+
+
+        .result-label {
+
+            font-size: 10px;
+
+            letter-spacing: 1.5px;
+
+            color: #718099;
+
+            text-transform: uppercase;
+
+            margin-bottom: 8px;
+        }
+
+
+        .result {
+
+            font-size: 18px;
+
+            font-weight: 700;
+
+            color: #8eaaff;
+        }
+
+
+        /* =====================================================
+           NAVIGATION
+        ===================================================== */
+
+        .navigation {
+
+            display: flex;
+
+            gap: 12px;
+
+            margin-top: 22px;
+        }
+
+
+        .nav-button {
+
+            flex: 1;
+
+            padding: 12px;
+
+            text-align: center;
+
+            text-decoration: none;
+
+            border-radius: 10px;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            color: white;
+
+            background:
+                rgba(255,255,255,0.06);
+
+            border:
+                1px solid rgba(255,255,255,0.08);
+
+            transition: 0.2s;
+        }
+
+
+        .nav-button:hover {
+
+            background:
+                rgba(255,255,255,0.10);
+
+            transform: translateY(-1px);
+        }
+
+
+        .logout {
+
+            color: #ff8090;
+        }
+
+
+        /* =====================================================
+           RESULT STATE
+        ===================================================== */
+
+        .result-real {
+
+            color: #49e39a;
+        }
+
+
+        .result-fake {
+
+            color: #ff7183;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media(max-width:900px) {
+
+            .workspace {
+
+                grid-template-columns: 1fr;
+            }
+
+            .info-panel {
+
+                order: 2;
+            }
+
+        }
+
+
+        @media(max-width:600px) {
+
+            .navbar {
+
+                width: calc(100% - 25px);
+
+                margin-top: 12px;
+            }
+
+
+            .main {
+
+                margin-top: 35px;
+
+                padding: 0 15px;
+            }
+
+
+            .upload-panel,
+            .info-panel {
+
+                padding: 20px;
+            }
+
+
+            .drop-zone {
+
+                min-height: 310px;
+            }
+
+
+            .nav-right {
+
+                display: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <nav class="navbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                ✦
+            </div>
+
+            Truth<span>AI</span>
+
+        </div>
+
+
+        <div class="nav-right">
+
+            <span class="status-dot"></span>
+
+            Image Forensics Engine Active
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="main">
+
+
+        <!-- HEADING -->
+
+        <section class="heading">
+
+            <div class="eyebrow">
+
+                AI IMAGE FORENSICS
+
+            </div>
+
+
+            <h1>
+
+                Detect What's<br>
+                Hidden in the Image.
+
+            </h1>
+
+
+            <p>
+
+                Upload an image and let the TruthAI
+                forensic engine analyze its visual
+                characteristics to identify potential
+                manipulation.
+
+            </p>
+
+        </section>
+
+
+
+        <!-- =================================================
+             WORKSPACE
+        ================================================== -->
+
+        <section class="workspace">
+
+
+            <!-- =================================================
+                 UPLOAD PANEL
+            ================================================== -->
+
+            <div class="upload-panel">
+
+
+                <div class="panel-top">
+
+                    <div class="panel-title">
+
+                        Image Analysis
+
+                    </div>
+
+
+                    <div class="panel-number">
+
+                        STEP 01 / 01
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- FORM -->
+
+                <form
+                    action="{{ url_for('fake_image') }}"
+                    method="POST"
+                    enctype="multipart/form-data"
+                    id="imageForm"
+                >
+
+
+                    <!-- DROP ZONE -->
+
+                    <div
+                        class="drop-zone"
+                        id="dropZone"
+                    >
+
+
+                        <!-- DEFAULT -->
+
+                        <div
+                            id="uploadContent"
+                        >
+
+                            <div class="scanner">
+
+                                <div class="scanner-icon">
+                                    ◈
+                                </div>
+
+                                <div class="scan-line"></div>
+
+                            </div>
+
+
+                            <div class="drop-title">
+
+                                Drop your image here
+
+                            </div>
+
+
+                            <div class="drop-description">
+
+                                Drag & drop your image or
+                                browse from your computer.
+
+                                <br>
+
+                                JPG, JPEG or PNG supported
+
+                            </div>
+
+
+                            <label
+                                for="imageInput"
+                                class="choose-button"
+                            >
+
+                                📁 Choose Image
+
+                            </label>
+
+                        </div>
+
+
+
+                        <!-- PREVIEW -->
+
+                        <div
+                            class="preview"
+                            id="preview"
+                        >
+
+                            <button
+                                type="button"
+                                class="preview-close"
+                                id="removePreview"
+                            >
+                                ×
+                            </button>
+
+
+                            <img
+                                id="previewImage"
+                                src=""
+                                alt="Selected image"
+                            >
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- FILE INPUT -->
+
+                    <input
+                        type="file"
+                        name="image"
+                        id="imageInput"
+                        class="file-input"
+                        accept="image/png,image/jpeg,image/jpg"
+                        required
+                    >
+
+
+                    <!-- ANALYZE -->
+
+                    <button
+                        type="submit"
+                        class="analyze-button"
+                        id="analyzeButton"
+                    >
+
+                        🔬 Analyze Image
+
+                    </button>
+
+                </form>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 INFORMATION PANEL
+            ================================================== -->
+
+            <aside class="info-panel">
+
+
+                <div class="info-header">
+
+                    <h2>
+                        Forensic Analysis
+                    </h2>
+
+                    <p>
+                        Our image analysis pipeline
+                        examines the uploaded image
+                        before producing a prediction.
+                    </p>
+
+                </div>
+
+
+
+                <!-- FEATURE 1 -->
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        🔍
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Image Inspection
+                        </h3>
+
+                        <p>
+                            The uploaded image is prepared
+                            for analysis by the detection
+                            pipeline.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- FEATURE 2 -->
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        🧬
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            ELA Analysis
+                        </h3>
+
+                        <p>
+                            Error Level Analysis is applied
+                            to identify differences caused
+                            by image recompression.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- FEATURE 3 -->
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        🧠
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            AI Model
+                        </h3>
+
+                        <p>
+                            The trained neural network
+                            analyzes the processed image
+                            and generates a prediction.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- FEATURE 4 -->
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        🛡️
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Result
+                        </h3>
+
+                        <p>
+                            The system reports whether
+                            the image is classified as
+                            real or potentially fake.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- RESULT -->
+
+                {% if result %}
+
+                <div class="result-box">
+
+                    <div class="result-label">
+
+                        Analysis Result
+
+                    </div>
+
+
+                    <div
+                        class="result
+                        {% if 'Real' in result %}
+                        result-real
+                        {% elif 'Fake' in result %}
+                        result-fake
+                        {% endif %}"
+                    >
+
+                        {{ result }}
+
+                    </div>
+
+                </div>
+
+                {% else %}
+
+                <div class="result-box">
+
+                    <div class="result-label">
+
+                        Analysis Result
+
+                    </div>
+
+
+                    <div class="result">
+
+                        Waiting for image...
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+
+                <!-- NAVIGATION -->
+
+                <div class="navigation">
+
+                    <a
+                        href="{{ url_for('dashboard') }}"
+                        class="nav-button"
+                    >
+
+                        ← News Detection
+
+                    </a>
+
+
+                    <a
+                        href="{{ url_for('logout') }}"
+                        class="nav-button logout"
+                    >
+
+                        Logout
+
+                    </a>
+
+                </div>
+
+
+            </aside>
+
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+        const dropZone =
+            document.getElementById("dropZone");
+
+        const imageInput =
+            document.getElementById("imageInput");
+
+        const preview =
+            document.getElementById("preview");
+
+        const previewImage =
+            document.getElementById("previewImage");
+
+        const uploadContent =
+            document.getElementById("uploadContent");
+
+        const removePreview =
+            document.getElementById("removePreview");
+
+        const imageForm =
+            document.getElementById("imageForm");
+
+        const analyzeButton =
+            document.getElementById("analyzeButton");
+
+
+
+        /* =================================================
+           CLICK DROP ZONE
+        ================================================== */
+
+        dropZone.addEventListener(
+            "click",
+            function(event) {
+
+                if (
+                    event.target.tagName !== "LABEL"
+                    &&
+                    event.target.tagName !== "BUTTON"
+                ) {
+
+                    imageInput.click();
+
+                }
+
+            }
+        );
+
+
+
+        /* =================================================
+           FILE SELECT
+        ================================================== */
+
+        imageInput.addEventListener(
+            "change",
+            function() {
+
+                if (
+                    this.files
+                    &&
+                    this.files[0]
+                ) {
+
+                    showPreview(
+                        this.files[0]
+                    );
+
+                }
+
+            }
+        );
+
+
+
+        /* =================================================
+           SHOW PREVIEW
+        ================================================== */
+
+        function showPreview(file) {
+
+            if (
+                !file.type.startsWith("image/")
+            ) {
+
+                alert(
+                    "Please select a valid image."
+                );
+
+                imageInput.value = "";
+
+                return;
+
+            }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload = function(e) {
+
+                previewImage.src =
+                    e.target.result;
+
+
+                uploadContent.style.display =
+                    "none";
+
+
+                preview.style.display =
+                    "block";
+
+            };
+
+
+            reader.readAsDataURL(file);
+
+        }
+
+
+
+        /* =================================================
+           REMOVE PREVIEW
+        ================================================== */
+
+        removePreview.addEventListener(
+            "click",
+            function(event) {
+
+                event.stopPropagation();
+
+
+                imageInput.value = "";
+
+
+                preview.style.display =
+                    "none";
+
+
+                uploadContent.style.display =
+                    "block";
+
+            }
+        );
+
+
+
+        /* =================================================
+           DRAG ENTER
+        ================================================== */
+
+        dropZone.addEventListener(
+            "dragover",
+            function(event) {
+
+                event.preventDefault();
+
+                dropZone.classList.add(
+                    "dragging"
+                );
+
+            }
+        );
+
+
+
+        /* =================================================
+           DRAG LEAVE
+        ================================================== */
+
+        dropZone.addEventListener(
+            "dragleave",
+            function() {
+
+                dropZone.classList.remove(
+                    "dragging"
+                );
+
+            }
+        );
+
+
+
+        /* =================================================
+           DROP
+        ================================================== */
+
+        dropZone.addEventListener(
+            "drop",
+            function(event) {
+
+                event.preventDefault();
+
+
+                dropZone.classList.remove(
+                    "dragging"
+                );
+
+
+                const files =
+                    event.dataTransfer.files;
+
+
+                if (
+                    files.length > 0
+                ) {
+
+                    imageInput.files =
+                        files;
+
+
+                    showPreview(
+                        files[0]
+                    );
+
+                }
+
+            }
+        );
+
+
+
+        /* =================================================
+           FORM SUBMIT
+        ================================================== */
+
+        imageForm.addEventListener(
+            "submit",
+            function() {
+
+                analyzeButton.innerHTML =
+                    "⏳ Analyzing Image...";
+
+
+                analyzeButton.style.opacity =
+                    "0.7";
+
+
+                analyzeButton.style.pointerEvents =
+                    "none";
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>
